@@ -1,0 +1,57 @@
+[tool.poetry]
+name = "fastapi-stack-utils"
+version = "0.1.0"
+description = "Utils to extend the FastAPI with logging and exception handlers"
+authors = ["Jonas Krüger Svensson <jonas-ks@hotmail.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = ">0.68.0"
+asgi-correlation-id = "^3.0.0"
+
+[tool.poetry.dev-dependencies]
+httpx = "*"
+pytest = "*"
+pre-commit = "*"
+pytest-asyncio = "*"
+pytest-cov = "^3.0.0"
+dirty-equals = "^0.4"
+
+
+[tool.black]
+line-length = 120
+skip-string-normalization = true
+target-version = ['py37']
+include = '\.pyi?$'
+exclude = '''
+(
+    (\.eggs|\.git|\.hg|\.mypy_cache|\.tox|\.venv|\venv|\.github|\docs|\tests|\__pycache__)
+)
+'''
+
+[tool.isort]
+profile = "black"
+src_paths = ["fastapi_log_utils"]
+combine_as_imports = true
+line_length = 120
+sections = [
+    'FUTURE',
+    'STDLIB',
+    'THIRDPARTY',
+    'FIRSTPARTY',
+    'LOCALFOLDER',
+]
+
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
+exclude_lines = [
+    "if TYPE_CHECKING:",
+    "pragma: no cover",
+]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
