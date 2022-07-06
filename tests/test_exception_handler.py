@@ -4,7 +4,7 @@ import re
 import pytest
 from dirty_equals import IsStr
 from fastapi import HTTPException, Request
-from fastapi_log_utils.exception_handler import (
+from fastapi_stack_utils.exception_handler import (
     format_and_log_exception_internal,
     format_and_log_exception_public,
     http_exception_handler,

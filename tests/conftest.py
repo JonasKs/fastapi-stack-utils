@@ -4,8 +4,8 @@ from logging.config import dictConfig
 import pytest
 import pytest_asyncio
 from fastapi import APIRouter, FastAPI, HTTPException
-from fastapi_log_utils.middleware import LoggingMiddleware
-from fastapi_log_utils.route import AuditLog
+from fastapi_stack_utils.middleware import LoggingMiddleware
+from fastapi_stack_utils.route import AuditLog
 from httpx import AsyncClient
 from pydantic import BaseModel
 from starlette.middleware import Middleware
