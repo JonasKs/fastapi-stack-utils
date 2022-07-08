@@ -19,7 +19,10 @@ from fastapi_stack_utils.exception_handler import http_exception_handler, format
 from fastapi_stack_utils.middleware import LoggingMiddleware
 app.add_exception_handler(HTTPException, http_exception_handler)
 app.add_exception_handler(Exception, format_and_log_exception_internal)
-app.add_middleware(LoggingMiddleware)
+# make sure this middleware is after your asgi-correlation-id middleware
+# if you use `app.add_middleware()`, you have to place this above like this:
+app.add_middleware(LoggingMiddleware) 
+# app.add_middleware(CorrelationIdMiddleware, header_name='Correlation-ID')
 ```
 
 Add route class to all routes _closest_ to the view (`app/api/api_v1/endpoints/<file.py>`)
