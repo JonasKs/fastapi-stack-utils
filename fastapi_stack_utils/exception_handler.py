@@ -20,6 +20,7 @@ async def http_exception_handler(request: Request, exc: HTTPException) -> JSONRe
     else:
         headers['Access-Control-Expose-Headers'] = 'Correlation-ID'
     detail: list = exc.detail if isinstance(exc.detail, list) else [exc.detail]  # type: ignore
+    log.info('Detail: %s', detail)
     return JSONResponse(
         content={'detail': detail},
         status_code=exc.status_code,
@@ -44,7 +45,7 @@ async def format_and_log_exception_internal(request: Request, exc: Exception) ->
     This exception handler should only be used for internal systems, as it provides the str(exc) in return.
     For customer facing errors, please use `format_and_log_exception_public`
     """
-    log.exception('Unhandled exception raised in endpoint')
+    log.exception('Unhandled exception raised in endpoint: %s', exc)
     response_body = {'detail': [{'description': 'Internal Server Error', 'error': str(exc)}]}
     return generate_json_response(response_body=response_body)
 
@@ -55,6 +56,6 @@ async def format_and_log_exception_public(request: Request, exc: Exception) -> J
     This exception handler will hide the actual exception.
     For customer facing errors, please use `format_and_log_exception_public`
     """
-    log.exception('Unhandled exception raised in endpoint')
+    log.exception('Unhandled exception raised in endpoint: %s', exc)
     response_body = {'detail': [{'description': 'Internal Server Error', 'error': 'Internal Server Error'}]}
     return generate_json_response(response_body=response_body)
