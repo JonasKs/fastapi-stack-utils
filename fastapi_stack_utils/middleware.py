@@ -15,20 +15,36 @@ log = logging.getLogger('fastapi_stack_utils.middleware')
 
 def patch_fastapi_middlewares(middlewares: list['Middleware']) -> None:
     """
-    This function will take a list of Middleware(), and replace the `build_middleware_stack` function in
-    FastAPI. This means, when you initialize FastAPI(title=...), the `build_new_middleware_stack`-function below
+    This function will take a list of Middleware(), and replace(extend) the `build_middleware_stack` function in
+    FastAPI.
+    This means, when you initialize FastAPI(title=...), the `build_new_middleware_stack`-function below
     will be called, instead of `build_middleware_stack` shipped with FastAPI.
-    This behaviour is a bit different from `add_middleware` (where the middleware is added to FastAPI), since
-    we are now adding FastAPI to our middlewares. In other words, `app` can now be something like this:
-        CorrelationIdMiddleware(app=FastAPI())
-    Instead of
-        FastAPI(middleware=CorrelationIdMiddleware())
 
-    This approach allow us to define `app = FastAPI()` and still do `app.include_router()` etc. in this file.
+    In Starlette applications there are always two middlewares added:
+    * `ServerErrorMiddleware` is added as the very outermost middleware, to handle
+      any uncaught errors occurring anywhere in the entire stack. (Errors not handled by ExceptionMiddleware)
+    * `ExceptionMiddleware` is added as the very innermost middleware, to deal
+    with _handled_ exception cases occurring in the routing or endpoints.
 
-    We do this because we want FastAPI to fail, and then still pass on the response through our middlewares.
-    With `add_middleware()`, any unhandled exception would not go through middlewares on response, but with this
-    approach, the response will always be propagated to these middlewares.
+    The normal FastAPI middleware stack looks something like this, when using `add_middleware`:
+      FastAPI.middleware_stack
+        -> ServerErrorMiddleware
+          -> CorrelationIdMiddleware
+            -> CorsMiddleware
+              -> ExceptionMiddleware
+
+    Since the `ServerErrorMiddleware` overrides any uncaught error response, anything we did with the response in
+    previous middlewares are overwritten.
+
+    That's why we want this behaviour instead:
+      FastAPI.middleware_stack
+        -> CorrelationIdMiddleware
+          -> CORSMiddleware
+            -> ServerErrorMiddleware
+              -> ExceptionMiddleware
+
+    Here, we can see that _after_ ServerErrorMiddleware(and ExceptionMiddleware for handled exceptions)
+    has done its work, the request will still go through our CorrelationID and CORS middlewares.
     """
     current_middleware_stack = FastAPI.build_middleware_stack
 
