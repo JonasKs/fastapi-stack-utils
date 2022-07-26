@@ -1,6 +1,5 @@
 import logging
 
-from asgi_correlation_id.context import correlation_id
 from fastapi import HTTPException, Request
 from fastapi.responses import JSONResponse
 
@@ -12,13 +11,6 @@ async def http_exception_handler(request: Request, exc: HTTPException) -> JSONRe
     Forces the HTTPException output to contain a list in the `detail`-key
     """
     headers = getattr(exc, 'headers', {}) or {}
-    headers['Correlation-ID'] = correlation_id.get('')
-    if 'Access-Control-Expose-Headers' not in headers:
-        headers['Access-Control-Expose-Headers'] = 'Correlation-ID'
-    if 'Correlation-ID' not in headers.get('Access-Control-Expose-Headers', ''):
-        headers['Access-Control-Expose-Headers'] += ',Correlation-ID'
-    else:
-        headers['Access-Control-Expose-Headers'] = 'Correlation-ID'
     detail: list = exc.detail if isinstance(exc.detail, list) else [exc.detail]  # type: ignore
     log.info('Detail: %s', detail)
     return JSONResponse(
@@ -35,7 +27,6 @@ def generate_json_response(response_body: dict) -> JSONResponse:
     return JSONResponse(
         content=response_body,
         status_code=500,
-        headers={'Correlation-ID': correlation_id.get(''), 'Access-Control-Expose-Headers': 'Correlation-ID'},
     )
 
 
