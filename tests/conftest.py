@@ -4,7 +4,7 @@ from logging.config import dictConfig
 import pytest
 import pytest_asyncio
 from fastapi import APIRouter, FastAPI, HTTPException
-from fastapi_stack_utils.middleware import LoggingMiddleware
+from fastapi_stack_utils.middleware import LoggingMiddleware, patch_fastapi_middlewares
 from fastapi_stack_utils.route import AuditLog
 from httpx import AsyncClient
 from pydantic import BaseModel
@@ -40,7 +40,8 @@ def _configure_logging():
     dictConfig(LOGGING)
 
 
-fastapi_app = FastAPI(middleware=[Middleware(LoggingMiddleware)])
+patch_fastapi_middlewares(middlewares=[Middleware(LoggingMiddleware)])
+fastapi_app = FastAPI()
 router = APIRouter(route_class=AuditLog)
 
 
