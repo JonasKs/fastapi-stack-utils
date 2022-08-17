@@ -35,7 +35,7 @@ class AuditLog(APIRoute):
             if extra['body']:
                 log.info('Input body: %s', extra['body'], extra=extra)
             response: Response = await original_route_handler(request)
-            if 'method' not in ['OPTIONS', 'GET', 'HEAD']:
+            if request.method not in ['OPTIONS', 'GET', 'HEAD']:
                 log.info('Response body: %s', response.body.decode())
                 log.info('Response headers: %s', response.headers)
             return response
