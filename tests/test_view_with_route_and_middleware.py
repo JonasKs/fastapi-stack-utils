@@ -14,8 +14,6 @@ logger = logging.getLogger('fastapi_stack_utils')
             'logged',
             [
                 '[GET] /logged ',
-                'Response body: {"message":"Pure view"}',
-                "Response headers: MutableHeaders({'content-length': '23', 'content-type': " "'application/json'})",
             ],
             {'message': 'Pure view'},
         ],
@@ -24,8 +22,6 @@ logger = logging.getLogger('fastapi_stack_utils')
             '/logged/hello?query_param=hehe',
             [
                 '[GET] /logged/hello query_param=hehe',
-                'Response body: {"message":"hellohehe"}',
-                "Response headers: MutableHeaders({'content-length': '23', 'content-type': " "'application/json'})",
             ],
             {'message': 'hellohehe'},
         ],
