@@ -24,6 +24,7 @@ class AuditLog(APIRoute):
             if isinstance(bytes_body, bytes):
                 str_body = bytes_body.decode()
             extra = {
+                'user': request.headers.get('remote-user', 'Unknown'),
                 'method': request.method,
                 'path': request.url.path,
                 'query': request.query_params,
@@ -33,7 +34,7 @@ class AuditLog(APIRoute):
                 # override body with JSON if possible
                 extra['body'] = await request.json()
             if extra['body']:
-                log.info('Input body: %s', extra['body'], extra=extra)
+                log.info('%s sent body: %s', extra['user'], extra['body'], extra=extra)
             response: Response = await original_route_handler(request)
             if request.method not in ['OPTIONS', 'GET', 'HEAD']:
                 log.info('Response body: %s', response.body.decode())

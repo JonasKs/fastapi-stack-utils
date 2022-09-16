@@ -43,7 +43,7 @@ async def test_input_logged_get(method, path, logs, expected_response, client, c
             {'a': 'hehe', 'b': 'hoho', 'c': ['tihi', 123]},
             [
                 'Unknown > [POST] /logged/hello query_param=hehe',
-                "Input body: {'a': 'hehe', 'b': 'hoho', 'c': ['tihi', 123]}",
+                "Unknown sent body: {'a': 'hehe', 'b': 'hoho', 'c': ['tihi', 123]}",
                 'Response body: {"message":"hello: {\'a\': \'hehe\', \'b\': \'hoho\', \'c\': ' '[\'tihi\', \'123\']}"}',
                 "Response headers: MutableHeaders({'content-length': '69', 'content-type': " "'application/json'})",
                 'HTTP Request: POST http://test/logged/hello?query_param=hehe "HTTP/1.1 200 ' 'OK"',
@@ -56,7 +56,7 @@ async def test_input_logged_get(method, path, logs, expected_response, client, c
             {'bad object': 'lol'},
             [
                 'Unknown > [POST] /logged/hello query_param=hehe',
-                "Input body: {'bad object': 'lol'}",
+                "Unknown sent body: {'bad object': 'lol'}",
                 'HTTP Request: POST http://test/logged/hello?query_param=hehe "HTTP/1.1 422 ' 'Unprocessable Entity"',
             ],
             {
@@ -73,3 +73,14 @@ async def test_input_logged_post(method, path, input_body, logs, expected_respon
     response = await client.request(method, path, data=json.dumps(input_body))
     assert caplog.messages == logs
     assert response.json() == expected_response
+
+
+async def test_input_logged_post_user(client, caplog):
+    await client.request(
+        method='POST', url='/logged/hello', data=json.dumps({'hello': 'world'}), headers={'remote-user': 'Jonas'}
+    )
+    assert caplog.messages == [
+        'Jonas > [POST] /logged/hello ',
+        "Jonas sent body: {'hello': 'world'}",
+        'HTTP Request: POST http://test/logged/hello "HTTP/1.1 422 Unprocessable ' 'Entity"',
+    ]
