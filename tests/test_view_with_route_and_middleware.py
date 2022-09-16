@@ -13,7 +13,7 @@ logger = logging.getLogger('fastapi_stack_utils')
             'GET',
             'logged',
             [
-                '[GET] /logged ',
+                'Jonas > [GET] /logged ',
             ],
             {'message': 'Pure view'},
         ],
@@ -21,14 +21,14 @@ logger = logging.getLogger('fastapi_stack_utils')
             'GET',
             '/logged/hello?query_param=hehe',
             [
-                '[GET] /logged/hello query_param=hehe',
+                'Jonas > [GET] /logged/hello query_param=hehe',
             ],
             {'message': 'hellohehe'},
         ],
     ),
 )
 async def test_input_logged_get(method, path, logs, expected_response, client, caplog):
-    response = await client.request(method, path)
+    response = await client.request(method=method, url=path, headers={'Remote-User': 'Jonas'})
     assert caplog.messages == logs
     assert response.json() == expected_response
 
@@ -41,7 +41,7 @@ async def test_input_logged_get(method, path, logs, expected_response, client, c
             '/logged/hello?query_param=hehe',
             {'a': 'hehe', 'b': 'hoho', 'c': ['tihi', 123]},
             [
-                '[POST] /logged/hello query_param=hehe',
+                'Unknown > [POST] /logged/hello query_param=hehe',
                 "Input body: {'a': 'hehe', 'b': 'hoho', 'c': ['tihi', 123]}",
                 'Response body: {"message":"hello: {\'a\': \'hehe\', \'b\': \'hoho\', \'c\': ' '[\'tihi\', \'123\']}"}',
                 "Response headers: MutableHeaders({'content-length': '69', 'content-type': " "'application/json'})",
@@ -53,7 +53,7 @@ async def test_input_logged_get(method, path, logs, expected_response, client, c
             '/logged/hello?query_param=hehe',
             {'bad object': 'lol'},
             [
-                '[POST] /logged/hello query_param=hehe',
+                'Unknown > [POST] /logged/hello query_param=hehe',
                 "Input body: {'bad object': 'lol'}",
             ],
             {

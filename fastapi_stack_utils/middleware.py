@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any
 
 from fastapi import FastAPI
+from starlette.datastructures import Headers
 
 if TYPE_CHECKING:  # pragma: no cover
     from typing import Callable
@@ -72,13 +73,18 @@ class LoggingMiddleware:
         # Only handle http requests
         if scope['type'] != 'http':  # pragma: no cover
             return await self.app(scope, receive, send)
+
+        # Try to load request ID from the request headers
+        user = Headers(scope=scope).get('remote-user', 'Unknown')
         extra = {
+            'user': user,
             'method': scope.get('method', ''),
             'path': scope.get('path', ''),
             'query_string': scope.get('query_string', b'').decode(),
         }
         log.info(
-            '[%s] %s %s',
+            '%s > [%s] %s %s',
+            extra['user'],
             extra['method'],
             extra['path'],
             extra['query_string'],
