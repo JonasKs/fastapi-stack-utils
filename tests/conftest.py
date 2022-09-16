@@ -45,7 +45,6 @@ class InputBody(BaseModel):
 
 @router.post('/logged/{param}')
 async def logged_path_query(param: str, body: InputBody):
-    print({'message': f'{param}: {body.dict()}'})
     return {'message': f'{param}: {body.dict()}'}
 
 

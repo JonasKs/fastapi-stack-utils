@@ -19,10 +19,8 @@ pytest-asyncio = "*"
 pytest-cov = "^3.0.0"
 dirty-equals = "^0.4"
 asgi-correlation-id = "^3.0.0"
-
-
-[tool.poetry.group.dev.dependencies]
 pytest-freezegun = "^0.4.2"
+
 
 [tool.black]
 line-length = 120
