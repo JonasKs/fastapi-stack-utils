@@ -2,6 +2,7 @@ import json
 import logging
 
 import pytest
+from fastapi_stack_utils.logging_config import get_time_in_nano_seconds
 
 logger = logging.getLogger('fastapi_stack_utils')
 
@@ -12,9 +13,7 @@ logger = logging.getLogger('fastapi_stack_utils')
         [
             'GET',
             'logged',
-            [
-                'Jonas > [GET] /logged ',
-            ],
+            ['Jonas > [GET] /logged ', 'HTTP Request: GET http://test/logged "HTTP/1.1 200 OK"'],
             {'message': 'Pure view'},
         ],
         [
@@ -22,14 +21,16 @@ logger = logging.getLogger('fastapi_stack_utils')
             '/logged/hello?query_param=hehe',
             [
                 'Jonas > [GET] /logged/hello query_param=hehe',
+                'HTTP Request: GET http://test/logged/hello?query_param=hehe "HTTP/1.1 200 OK"',
             ],
             {'message': 'hellohehe'},
         ],
     ),
 )
-async def test_input_logged_get(method, path, logs, expected_response, client, caplog):
+async def test_input_logged_get(method, path, logs, expected_response, client, caplog, freezer):
     response = await client.request(method=method, url=path, headers={'Remote-User': 'Jonas'})
     assert caplog.messages == logs
+    assert caplog.records[0].nanostamp == get_time_in_nano_seconds()
     assert response.json() == expected_response
 
 
@@ -45,6 +46,7 @@ async def test_input_logged_get(method, path, logs, expected_response, client, c
                 "Input body: {'a': 'hehe', 'b': 'hoho', 'c': ['tihi', 123]}",
                 'Response body: {"message":"hello: {\'a\': \'hehe\', \'b\': \'hoho\', \'c\': ' '[\'tihi\', \'123\']}"}',
                 "Response headers: MutableHeaders({'content-length': '69', 'content-type': " "'application/json'})",
+                'HTTP Request: POST http://test/logged/hello?query_param=hehe "HTTP/1.1 200 ' 'OK"',
             ],
             {'message': "hello: {'a': 'hehe', 'b': 'hoho', 'c': ['tihi', '123']}"},
         ],
@@ -55,6 +57,7 @@ async def test_input_logged_get(method, path, logs, expected_response, client, c
             [
                 'Unknown > [POST] /logged/hello query_param=hehe',
                 "Input body: {'bad object': 'lol'}",
+                'HTTP Request: POST http://test/logged/hello?query_param=hehe "HTTP/1.1 422 ' 'Unprocessable Entity"',
             ],
             {
                 'detail': [

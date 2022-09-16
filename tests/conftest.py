@@ -4,44 +4,26 @@ from logging.config import dictConfig
 import pytest
 import pytest_asyncio
 from fastapi import APIRouter, FastAPI
+from fastapi_stack_utils.logging_config import generate_base_logging_config
 from fastapi_stack_utils.middleware import LoggingMiddleware, patch_fastapi_middlewares
 from fastapi_stack_utils.route import AuditLog
 from httpx import AsyncClient
-from pydantic import BaseModel
+from pydantic import BaseModel, BaseSettings
 from starlette.middleware import Middleware
 
 
 @pytest.fixture(autouse=True, scope='session')
 def _configure_logging():
-    LOGGING = {
-        'version': 1,
-        'disable_existing_loggers': False,
-        'formatters': {
-            'basic': {
-                'class': 'logging.Formatter',
-                'datefmt': '%H:%M:%S',
-                'format': '%(message)s',
-            },
-        },
-        'handlers': {
-            'console': {
-                'class': 'logging.StreamHandler',
-                'formatter': 'basic',
-            },
-        },
-        'loggers': {
-            'fastapi_stack_utils': {
-                'handlers': ['console'],
-                'level': 'DEBUG',
-                'propagate': True,
-            },
-        },
-    }
-    dictConfig(LOGGING)
+    class Settings(BaseSettings):
+        ENVIRONMENT: str = 'dev'
+
+    dictConfig(generate_base_logging_config(settings=Settings()))
 
 
 patch_fastapi_middlewares(middlewares=[Middleware(LoggingMiddleware)])
 fastapi_app = FastAPI()
+
+
 router = APIRouter(route_class=AuditLog)
 
 

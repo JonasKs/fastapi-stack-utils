@@ -50,5 +50,6 @@ repos:
             fastapi,
             pydantic,
             starlette,
-            httpx
+            httpx,
+            types-pytz
           ]
