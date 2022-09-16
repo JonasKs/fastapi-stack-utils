@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
-          python-version: "3.10"
+          python-version: "3.10.7"
       - run: pip install pre-commit
         if: steps.cache-venv.outputs.cache-hit != 'true'
       - uses: actions/cache@v2
@@ -28,7 +28,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [ "3.10", "3.11.0-alpha.7" ]
+        python-version: [ "3.10.7", "3.11.0-alpha.7" ]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
@@ -47,7 +47,7 @@ jobs:
         id: cache-venv
         with:
           path: .venv
-          key: ${{ hashFiles('**/poetry.lock') }}-${{ matrix.python-version }}-1
+          key: ${{ hashFiles('**/poetry.lock') }}-${{ matrix.python-version }}-2
       - run: |
           python -m venv .venv
           source .venv/bin/activate
@@ -64,4 +64,4 @@ jobs:
         with:
           file: ./coverage.xml
           fail_ci_if_error: true
-        if: matrix.python-version == '3.10'
+        if: matrix.python-version == '3.10.7'
