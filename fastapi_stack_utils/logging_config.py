@@ -1,9 +1,9 @@
 from datetime import datetime
 from logging import Filter, LogRecord
 from time import time_ns
+from typing import Protocol
 
 import pytz
-from typing_extensions import Protocol
 
 
 def get_time_in_nano_seconds() -> str:
