@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "fastapi-stack-utils"
-version = "0.5.0"  # remember to change in fastapi_stack_utils/__init__.py too
+version = "0.5.1"  # remember to change in fastapi_stack_utils/__init__.py too
 description = "Utils to extend the FastAPI with logging and exception handlers"
 authors = ["Jonas Krüger Svensson <jonas-ks@hotmail.com>"]
 license = "MIT"
@@ -13,7 +13,7 @@ gunicorn = "20.1.0"
 python-json-logger = "2.0.4"
 pytz = "2022.2.1"
 sentry-sdk = "1.9.8"
-uvloop = "0.17.0"
+uvloop = {version = "0.17.0", optional = true, markers = "sys_platform != \"win32\""}
 uvicorn = { extras = ["standard"], version = "0.18.3" }
 
 [tool.poetry.dev-dependencies]
