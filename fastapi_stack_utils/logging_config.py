@@ -40,7 +40,7 @@ def generate_base_logging_config(settings: Settings) -> dict:
         'filters': {
             'correlation_id': {
                 '()': 'asgi_correlation_id.CorrelationIdFilter',
-                'uuid_length': 8 if settings.ENVIRONMENT == 'dev' else 32,
+                'uuid_length': 36,
             },
             'nanostamp': {'()': 'fastapi_stack_utils.logging_config.NanoStamp'},
         },

@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 from asgi_correlation_id import CorrelationIdMiddleware
 from dirty_equals import IsUUID
 from fastapi import FastAPI
@@ -6,7 +8,10 @@ from httpx import AsyncClient
 from starlette.middleware import Middleware
 
 patch_fastapi_middlewares(
-    middlewares=[Middleware(LoggingMiddleware), Middleware(CorrelationIdMiddleware, header_name='Correlation-ID')]
+    middlewares=[
+        Middleware(LoggingMiddleware),
+        Middleware(CorrelationIdMiddleware, header_name='Correlation-ID', generator=lambda: str(uuid4())),
+    ]
 )
 fastapi_app = FastAPI()
 
