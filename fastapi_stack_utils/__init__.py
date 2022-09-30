@@ -1,1 +1,3 @@
-__version__ = '0.5.2'
+from fastapi_stack_utils.schemas.http_exceptions import DefaultError, ErrorResponse, ServerError  # noqa
+
+__version__ = '0.5.3'

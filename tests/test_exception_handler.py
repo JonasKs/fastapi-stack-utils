@@ -17,7 +17,40 @@ from fastapi_stack_utils.exception_handler import (
 )
 async def test_http_exception_handler(exc):
     response = await http_exception_handler(request=Request(scope={'type': 'http'}), exc=exc)
-    assert json.loads(response.body.decode()) == {'detail': ['It should wrap this in a list']}
+    assert json.loads(response.body.decode()) == {
+        'detail': [{'description': 'It should wrap this in a list', 'error': 'It should wrap this in a list'}]
+    }
+
+
+class X:
+    def __init__(self):
+        self.a = 'yolo'
+
+    def __repr__(self):
+        return repr(self.a)
+
+
+@pytest.mark.parametrize(
+    'exc, expected',
+    [
+        (
+            HTTPException(500, {'errors': 'hello', 'body': 'world'}),
+            {
+                'detail': [
+                    {
+                        'description': "{'errors': 'hello', 'body': 'world'}",
+                        'error': "{'errors': 'hello', 'body': 'world'}",
+                    }
+                ]
+            },
+        ),
+        (HTTPException(500, X()), {'detail': [{'description': "'yolo'", 'error': "'yolo'"}]}),
+        (HTTPException(500, [X()]), {'detail': [{'description': "'yolo'", 'error': "'yolo'"}]}),
+    ],
+)
+async def test_exception_handler_random_types(exc, expected):
+    response = await http_exception_handler(request=Request(scope={'type': 'http'}), exc=exc)
+    assert json.loads(response.body.decode()) == expected
 
 
 async def test_http_exception_handler_headers():
