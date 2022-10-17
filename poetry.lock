@@ -17,7 +17,7 @@ trio = ["trio (>=0.16)"]
 
 [[package]]
 name = "asgi-correlation-id"
-version = "3.1.0"
+version = "3.2.0"
 description = "Middleware correlating project logs to individual requests"
 category = "main"
 optional = false
@@ -38,7 +38,7 @@ python-versions = ">=3.5"
 dev = ["cloudpickle", "coverage[toml] (>=5.0.2)", "furo", "hypothesis", "mypy (>=0.900,!=0.940)", "pre-commit", "pympler", "pytest (>=4.3.0)", "pytest-mypy-plugins", "sphinx", "sphinx-notfound-page", "zope.interface"]
 docs = ["furo", "sphinx", "sphinx-notfound-page", "zope.interface"]
 tests = ["cloudpickle", "coverage[toml] (>=5.0.2)", "hypothesis", "mypy (>=0.900,!=0.940)", "pympler", "pytest (>=4.3.0)", "pytest-mypy-plugins", "zope.interface"]
-tests_no_zope = ["cloudpickle", "coverage[toml] (>=5.0.2)", "hypothesis", "mypy (>=0.900,!=0.940)", "pympler", "pytest (>=4.3.0)", "pytest-mypy-plugins"]
+tests-no-zope = ["cloudpickle", "coverage[toml] (>=5.0.2)", "hypothesis", "mypy (>=0.900,!=0.940)", "pympler", "pytest (>=4.3.0)", "pytest-mypy-plugins"]
 
 [[package]]
 name = "certifi"
@@ -491,7 +491,7 @@ falcon = ["falcon (>=1.4)"]
 fastapi = ["fastapi (>=0.79.0)"]
 flask = ["blinker (>=1.1)", "flask (>=0.11)"]
 httpx = ["httpx (>=0.16.0)"]
-pure_eval = ["asttokens", "executing", "pure-eval"]
+pure-eval = ["asttokens", "executing", "pure-eval"]
 pyspark = ["pyspark (>=2.4.4)"]
 quart = ["blinker (>=1.1)", "quart (>=0.16.1)"]
 rq = ["rq (>=0.6)"]
@@ -654,7 +654,7 @@ python-versions = ">=3.7"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.10,<3.11"
-content-hash = "4051a0e88ad2f6dd2576ebfddf52cdd7634dd12bfc365928db44cc34e2733863"
+content-hash = "b6fcc1372ecec142bd55b280feac08900e6a1264e533db5a1a5232af9ed1dd11"
 
 [metadata.files]
 anyio = [
@@ -662,8 +662,8 @@ anyio = [
     {file = "anyio-3.6.1.tar.gz", hash = "sha256:413adf95f93886e442aea925f3ee43baa5a765a64a0f52c6081894f9992fdd0b"},
 ]
 asgi-correlation-id = [
-    {file = "asgi-correlation-id-3.1.0.tar.gz", hash = "sha256:2178573dc3ad3169223140b9c953b20f5f1500c894f33b2affb938c8689b3367"},
-    {file = "asgi_correlation_id-3.1.0-py3-none-any.whl", hash = "sha256:9721af51677533bf51b0d19e7691d513b963d95c325767c5e3be27ffb28c36d2"},
+    {file = "asgi_correlation_id-3.2.0-py3-none-any.whl", hash = "sha256:e900a6004213d3a4e1edb8fd099bad6239aaaad835fcea7671ef15741df6dd63"},
+    {file = "asgi_correlation_id-3.2.0.tar.gz", hash = "sha256:cbdabda44e0dd4b4bfdd0f2a92b1906cc88dba038cb92ea3e9ece156df2b96f4"},
 ]
 attrs = [
     {file = "attrs-22.1.0-py2.py3-none-any.whl", hash = "sha256:86efa402f67bf2df34f51a335487cf46b1ec130d02b8d39fd248abfd30da551c"},
