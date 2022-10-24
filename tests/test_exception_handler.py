@@ -13,7 +13,18 @@ from fastapi_stack_utils.exception_handler import (
 
 @pytest.mark.parametrize(
     'exc',
-    [(HTTPException(500, ['It should wrap this in a list'])), (HTTPException(500, 'It should wrap this in a list'))],
+    [
+        (
+            HTTPException(
+                500, [{'description': 'It should wrap this in a list', 'error': 'It should wrap this in a list'}]
+            )
+        ),
+        (
+            HTTPException(
+                500, {'description': 'It should wrap this in a list', 'error': 'It should wrap this in a list'}
+            )
+        ),
+    ],
 )
 async def test_http_exception_handler(exc):
     response = await http_exception_handler(request=Request(scope={'type': 'http'}), exc=exc)
@@ -54,7 +65,11 @@ async def test_exception_handler_random_types(exc, expected):
 
 
 async def test_http_exception_handler_headers():
-    exc = HTTPException(500, ['It should wrap this in a list'], {'some': 'header'})
+    exc = HTTPException(
+        500,
+        {'description': 'It should wrap this in a list', 'error': 'It should wrap this in a list'},
+        {'some': 'header'},
+    )
     response = await http_exception_handler(request=Request(scope={'type': 'http'}), exc=exc)
     assert exc.headers == {'some': 'header'}
     assert dict(response.headers) == {
@@ -65,7 +80,7 @@ async def test_http_exception_handler_headers():
 
 
 async def test_http_exception_handler_no_headers():
-    exc = HTTPException(500, ['It should wrap this in a list'])
+    exc = HTTPException(500, {'description': 'It should wrap this in a list', 'error': 'It should wrap this in a list'})
     response = await http_exception_handler(request=Request(scope={'type': 'http'}), exc=exc)
     assert exc.headers is None
     assert dict(response.headers) == {
@@ -76,7 +91,9 @@ async def test_http_exception_handler_no_headers():
 
 async def test_http_exception_handler_header_includes_access_expose():
     exc = HTTPException(
-        500, ['It should wrap this in a list'], {'some': 'header', 'Access-Control-Expose-Headers': 'some'}
+        500,
+        {'description': 'It should wrap this in a list', 'error': 'It should wrap this in a list'},
+        {'some': 'header', 'Access-Control-Expose-Headers': 'some'},
     )
     response = await http_exception_handler(request=Request(scope={'type': 'http'}), exc=exc)
     assert dict(response.headers) == {
