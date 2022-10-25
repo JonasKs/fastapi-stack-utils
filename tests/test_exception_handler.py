@@ -12,25 +12,45 @@ from fastapi_stack_utils.exception_handler import (
 
 
 @pytest.mark.parametrize(
-    'exc',
+    'exception, expected',
     [
         (
             HTTPException(
                 500, [{'description': 'It should wrap this in a list', 'error': 'It should wrap this in a list'}]
-            )
+            ),
+            [{'description': 'It should wrap this in a list', 'error': 'It should wrap this in a list'}],
         ),
         (
             HTTPException(
                 500, {'description': 'It should wrap this in a list', 'error': 'It should wrap this in a list'}
-            )
+            ),
+            [{'description': 'It should wrap this in a list', 'error': 'It should wrap this in a list'}],
+        ),
+        (
+            HTTPException(
+                422,
+                {'loc': ['param', 'subnet_id'], 'msg': 'It should wrap this in a list', 'type': 'value_error.invalid'},
+            ),
+            [{'loc': ['param', 'subnet_id'], 'msg': 'It should wrap this in a list', 'type': 'value_error.invalid'}],
+        ),
+        (
+            HTTPException(
+                422,
+                [
+                    {
+                        'loc': ['param', 'subnet_id'],
+                        'msg': 'It should wrap this in a list',
+                        'type': 'value_error.invalid',
+                    }
+                ],
+            ),
+            [{'loc': ['param', 'subnet_id'], 'msg': 'It should wrap this in a list', 'type': 'value_error.invalid'}],
         ),
     ],
 )
-async def test_http_exception_handler(exc):
-    response = await http_exception_handler(request=Request(scope={'type': 'http'}), exc=exc)
-    assert json.loads(response.body.decode()) == {
-        'detail': [{'description': 'It should wrap this in a list', 'error': 'It should wrap this in a list'}]
-    }
+async def test_http_exception_handler(exception, expected):
+    response = await http_exception_handler(request=Request(scope={'type': 'http'}), exc=exception)
+    assert json.loads(response.body.decode()) == {'detail': expected}
 
 
 class X:
@@ -57,6 +77,7 @@ class X:
         ),
         (HTTPException(500, X()), {'detail': [{'description': "'yolo'", 'error': "'yolo'"}]}),
         (HTTPException(500, [X()]), {'detail': [{'description': "'yolo'", 'error': "'yolo'"}]}),
+        (HTTPException(422, [X()]), {'detail': [{'description': "'yolo'", 'error': "'yolo'"}]}),
     ],
 )
 async def test_exception_handler_random_types(exc, expected):
