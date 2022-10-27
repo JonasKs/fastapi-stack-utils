@@ -40,7 +40,7 @@ def generate_base_logging_config(settings: Settings) -> dict:
         'filters': {
             'correlation_id': {
                 '()': 'asgi_correlation_id.CorrelationIdFilter',
-                'uuid_length': 36,
+                'uuid_length': 8 if settings.ENVIRONMENT == 'dev' else 36,
             },
             'nanostamp': {'()': 'fastapi_stack_utils.logging_config.NanoStamp'},
         },
@@ -93,7 +93,7 @@ def generate_base_logging_config(settings: Settings) -> dict:
             'asgi_correlation_id': {'level': 'WARNING'},
             'fastapi_audit_log': {'level': 'INFO'},
             'gunicorn': {'level': 'INFO'},
-            'uvicorn': {'level': 'INFO'},
+            'uvicorn': {'level': 'WARNING'},
         },
         'root': {
             'handlers': ['console'] if settings.ENVIRONMENT in ['dev', 'test'] else ['json'],

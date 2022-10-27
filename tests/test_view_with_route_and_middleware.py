@@ -84,3 +84,16 @@ async def test_input_logged_post_user(client, caplog):
         "Jonas sent body: {'hello': 'world'}",
         'HTTP Request: POST http://test/logged/hello "HTTP/1.1 422 Unprocessable ' 'Entity"',
     ]
+
+
+async def test_openapi_unknown_user_not_logged(client, caplog):
+    await client.request(method='GET', url='/api/v1/openapi.json')
+    assert caplog.messages == ['HTTP Request: GET http://test/api/v1/openapi.json "HTTP/1.1 404 Not Found"']
+
+
+async def test_openapi_but_with_user_is_logged(client, caplog):
+    await client.request(method='GET', url='/api/v1/openapi.json', headers={'remote-user': 'Jonas'})
+    assert caplog.messages == [
+        'Jonas > [GET] /api/v1/openapi.json ',
+        'HTTP Request: GET http://test/api/v1/openapi.json "HTTP/1.1 404 Not Found"',
+    ]
