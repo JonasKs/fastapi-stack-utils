@@ -76,19 +76,21 @@ class LoggingMiddleware:
 
         # Try to load request ID from the request headers
         user = Headers(scope=scope).get('remote-user', 'Unknown')
+        path = scope.get('path', '')
         extra = {
             'user': user,
             'method': scope.get('method', ''),
-            'path': scope.get('path', ''),
+            'path': path,
             'query_string': scope.get('query_string', b'').decode(),
         }
-        log.info(
-            '%s > [%s] %s %s',
-            extra['user'],
-            extra['method'],
-            extra['path'],
-            extra['query_string'],
-            extra=extra,
-        )
+        if not (path.endswith('openapi.json') and user == 'Unknown'):
+            log.info(
+                '%s > [%s] %s %s',
+                extra['user'],
+                extra['method'],
+                extra['path'],
+                extra['query_string'],
+                extra=extra,
+            )
         await self.app(scope, receive, send)
         return
