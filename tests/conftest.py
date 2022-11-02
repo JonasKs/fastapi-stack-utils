@@ -5,11 +5,9 @@ import pytest
 import pytest_asyncio
 from fastapi import APIRouter, FastAPI
 from fastapi_stack_utils.logging_config import generate_base_logging_config
-from fastapi_stack_utils.middleware import LoggingMiddleware, patch_fastapi_middlewares
 from fastapi_stack_utils.route import AuditLog
 from httpx import AsyncClient
 from pydantic import BaseModel, BaseSettings
-from starlette.middleware import Middleware
 
 
 @pytest.fixture(autouse=True, scope='session')
@@ -20,7 +18,6 @@ def _configure_logging():
     dictConfig(generate_base_logging_config(settings=Settings()))
 
 
-patch_fastapi_middlewares(middlewares=[Middleware(LoggingMiddleware)])
 fastapi_app = FastAPI()
 
 

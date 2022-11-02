@@ -1,15 +1,12 @@
 import logging
-from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any
 
 from fastapi import FastAPI
-from starlette.datastructures import Headers
 
 if TYPE_CHECKING:  # pragma: no cover
     from typing import Callable
 
     from starlette.middleware import Middleware
-    from starlette.types import ASGIApp, Receive, Scope, Send
 
 log = logging.getLogger('fastapi_stack_utils.middleware')
 
@@ -59,38 +56,3 @@ def patch_fastapi_middlewares(middlewares: list['Middleware']) -> None:
         return app
 
     FastAPI.build_middleware_stack = _build_new_middleware_stack  # type: ignore
-
-
-@dataclass
-class LoggingMiddleware:
-    app: 'ASGIApp'
-
-    async def __call__(self, scope: 'Scope', receive: 'Receive', send: 'Send') -> None:
-        """
-        Attempt to log path, method etc.
-        Input body will not be logged - check out route.AuditLog()
-        """
-        # Only handle http requests
-        if scope['type'] != 'http':  # pragma: no cover
-            return await self.app(scope, receive, send)
-
-        # Try to load request ID from the request headers
-        user = Headers(scope=scope).get('remote-user', 'Unknown')
-        path = scope.get('path', '')
-        extra = {
-            'user': user,
-            'method': scope.get('method', ''),
-            'path': path,
-            'query_string': scope.get('query_string', b'').decode(),
-        }
-        if not (path.endswith('openapi.json') and user == 'Unknown'):
-            log.info(
-                '%s > [%s] %s %s',
-                extra['user'],
-                extra['method'],
-                extra['path'],
-                extra['query_string'],
-                extra=extra,
-            )
-        await self.app(scope, receive, send)
-        return
