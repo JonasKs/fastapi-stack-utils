@@ -3,13 +3,12 @@ from uuid import uuid4
 from asgi_correlation_id import CorrelationIdMiddleware
 from dirty_equals import IsUUID
 from fastapi import FastAPI
-from fastapi_stack_utils.middleware import LoggingMiddleware, patch_fastapi_middlewares
+from fastapi_stack_utils.middleware import patch_fastapi_middlewares
 from httpx import AsyncClient
 from starlette.middleware import Middleware
 
 patch_fastapi_middlewares(
     middlewares=[
-        Middleware(LoggingMiddleware),
         Middleware(CorrelationIdMiddleware, header_name='Correlation-ID', generator=lambda: str(uuid4())),
     ]
 )
