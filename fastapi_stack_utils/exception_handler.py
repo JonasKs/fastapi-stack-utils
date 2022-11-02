@@ -14,9 +14,7 @@ def generate_json_response(
     """
     Generate a JSON response with correlation ID attached
     """
-    return JSONResponse(
-        content=response_body.dict(exclude_defaults=True, exclude_none=True), status_code=status_code, headers=headers
-    )
+    return JSONResponse(content=response_body.dict(), status_code=status_code, headers=headers)
 
 
 async def http_exception_handler(request: Request, exc: HTTPException) -> JSONResponse:
@@ -29,29 +27,10 @@ async def http_exception_handler(request: Request, exc: HTTPException) -> JSONRe
     # /docs_src/custom_request_and_route/tutorial002.py#L17-L18
     formatted_errors: list[ServerError]
     detail: Any = exc.detail
-    try:
-        if exc.status_code == 422:
-            if isinstance(detail, (list, tuple)):
-                formatted_errors = [
-                    ServerError(loc=element['loc'], msg=str(element['msg']), type=str(element['type']))
-                    for element in detail
-                ]
-            else:
-                formatted_errors = [ServerError(loc=detail['loc'], msg=str(detail['msg']), type=str(detail['type']))]
-        else:
-            if isinstance(detail, (list, tuple)):
-                formatted_errors = [
-                    ServerError(description=str(element['description']), error=str(element['error']))
-                    for element in detail
-                ]
-            else:
-                formatted_errors = [ServerError(description=str(detail['description']), error=str(detail['error']))]
-    except Exception:
-        if isinstance(detail, (list, tuple)):
-            formatted_errors = [ServerError(description=str(element), error=str(element)) for element in detail]
-        else:
-            formatted_errors = [ServerError(description=str(detail), error=str(detail))]
-
+    if isinstance(detail, (list, tuple)):
+        formatted_errors = [ServerError(description=str(element), error=str(element)) for element in detail]
+    else:
+        formatted_errors = [ServerError(description=str(detail), error=str(detail))]
     return generate_json_response(
         response_body=ErrorResponse(detail=formatted_errors),
         status_code=exc.status_code,
