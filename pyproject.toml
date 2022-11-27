@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "fastapi-stack-utils"
-version = "0.7.0"  # remember to change in fastapi_stack_utils/__init__.py too
+version = "0.7.1"  # remember to change in fastapi_stack_utils/__init__.py too
 description = "Utils to extend the FastAPI with logging and exception handlers"
 authors = ["Jonas Krüger Svensson <jonas-ks@hotmail.com>"]
 license = "MIT"
