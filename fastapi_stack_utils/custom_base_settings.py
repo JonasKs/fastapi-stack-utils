@@ -1,3 +1,4 @@
+import contextlib
 from typing import Literal
 
 from pydantic import BaseSettings, Field, HttpUrl
@@ -9,6 +10,12 @@ class SettingsConfig(BaseSettings.Config):
     env_file = '.env.override'
     env_file_encoding = 'utf-8'
     vault_url: HttpUrl = HttpUrl('https://vault.intility.com', scheme='https')
+
+    with contextlib.suppress(ModuleNotFoundError):
+        from azure.identity import ClientSecretCredential
+        from azure.identity.aio import ClientSecretCredential as AsyncClientSecretCredential
+
+        keep_untouched = (AsyncClientSecretCredential, ClientSecretCredential)
 
 
 class Env(BaseSettings):
