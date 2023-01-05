@@ -300,7 +300,7 @@ test = ["Cython (>=0.29.24,<0.30.0)"]
 
 [[package]]
 name = "httpx"
-version = "0.23.2"
+version = "0.23.3"
 description = "The next generation HTTP client."
 category = "dev"
 optional = false
@@ -899,7 +899,7 @@ python-versions = ">=3.7"
 [metadata]
 lock-version = "1.1"
 python-versions = ">=3.10,<3.12"
-content-hash = "271698d24cc584ce74e9bf6b13424d443e0bc8acae4286f241a11348a853545b"
+content-hash = "3f7f40ae9fb23042d3c64703bb8659c4c661f97a4d1ea595bf1a2198afa55840"
 
 [metadata.files]
 anyio = [
@@ -1172,8 +1172,8 @@ httptools = [
     {file = "httptools-0.5.0.tar.gz", hash = "sha256:295874861c173f9101960bba332429bb77ed4dcd8cdf5cee9922eb00e4f6bc09"},
 ]
 httpx = [
-    {file = "httpx-0.23.2-py3-none-any.whl", hash = "sha256:106cded342a44e443060fab70ef327139248c61939e77d73964560c8d8b57069"},
-    {file = "httpx-0.23.2.tar.gz", hash = "sha256:e824a6fa18ffaa6423c6f3a32d5096fc15bd8dff43663a223f06242fc69451a8"},
+    {file = "httpx-0.23.3-py3-none-any.whl", hash = "sha256:a211fcce9b1254ea24f0cd6af9869b3d29aba40154e947d2a07bb499b3e310d6"},
+    {file = "httpx-0.23.3.tar.gz", hash = "sha256:9818458eb565bb54898ccb9b8b251a28785dd4a55afbc23d0eb410754fe7d0f9"},
 ]
 hvac = [
     {file = "hvac-0.11.2-py2.py3-none-any.whl", hash = "sha256:3e8a34804b1e20954a2b4991cc13ed9c09b32e50dadd9d3438224481150f6568"},
