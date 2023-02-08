@@ -855,14 +855,14 @@ email = ["email-validator (>=1.0.3)"]
 
 [[package]]
 name = "pydantic-vault"
-version = "0.7.1"
+version = "0.7.2"
 description = "A simple extension to Pydantic BaseSettings that can retrieve secrets from Hashicorp Vault"
 category = "main"
 optional = false
 python-versions = ">=3.6.2,<4.0.0"
 files = [
-    {file = "pydantic-vault-0.7.1.tar.gz", hash = "sha256:c3d5f2d8ff97722ec8f5729f2fdb28a2aa3de37a6586719df1373039eb5d33bc"},
-    {file = "pydantic_vault-0.7.1-py3-none-any.whl", hash = "sha256:49239cba79e7e99178bb2e401c902f59b1e604055ade3a05bc68d47235730d73"},
+    {file = "pydantic_vault-0.7.2-py3-none-any.whl", hash = "sha256:16295de138e917f0efd05d99245430686b8776785722cea22f8e6926ccb7dea6"},
+    {file = "pydantic_vault-0.7.2.tar.gz", hash = "sha256:046e9097db3aee5fc6c7203a69c459457fe1d73705b01c9c0719fe873cab030c"},
 ]
 
 [package.dependencies]
@@ -1550,4 +1550,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<3.12"
-content-hash = "7bf50bc3b3dfebaeb908a342bd0cd3edcce45fe2fe88bd5b8fee3e1c9553f51c"
+content-hash = "9d5b23fc6b1a52b134aec490641960d2811b47511a39c0f95065188d15d91e58"
