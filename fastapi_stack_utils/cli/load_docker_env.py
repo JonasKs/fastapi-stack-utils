@@ -11,7 +11,15 @@ def load_docker_env() -> None:
     git_remote = subprocess.run(['git', 'remote', '-v'], check=True, stdout=subprocess.PIPE).stdout.decode('utf-8')
 
     project_name = (
-        git_remote.split('\n')[0].split()[1].split('@')[1].split(':')[1].split('/')[-1].removesuffix('.git').strip()
+        git_remote.split('\n')[0]
+        .split()[1]
+        .split('@')[1]
+        .split(':')[1]
+        .split('/')[-1]
+        .removesuffix('.git')
+        .strip()
+        .removesuffix('-backend')
+        .removesuffix('-build')
     )
 
     try:

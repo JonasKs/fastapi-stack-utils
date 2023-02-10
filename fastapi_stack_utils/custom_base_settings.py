@@ -40,6 +40,9 @@ class CustomBaseSettings(BaseSettings):
         Inherit the shared settings and override the custom source to add vault if in dev
         """
 
+        if env.ENVIRONMENT == 'test':
+            env_file = '.env'
+
         @classmethod
         def customise_sources(
             cls,
