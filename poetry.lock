@@ -23,18 +23,21 @@ trio = ["trio (>=0.16,<0.22)"]
 
 [[package]]
 name = "asgi-correlation-id"
-version = "3.2.1"
+version = "3.2.2"
 description = "Middleware correlating project logs to individual requests"
 category = "main"
 optional = false
 python-versions = ">=3.7,<4.0"
 files = [
-    {file = "asgi_correlation_id-3.2.1-py3-none-any.whl", hash = "sha256:ba8b7dc67403183ce77721f8c48fcb6aee92f3b246026f7dde0230323f343663"},
-    {file = "asgi_correlation_id-3.2.1.tar.gz", hash = "sha256:c2370cbf3a71dd33dd4f067495ba87d0afdbb45b5256f1d05362e3a20d4efe60"},
+    {file = "asgi_correlation_id-3.2.2-py3-none-any.whl", hash = "sha256:7e712839312ddab7424081a5f470c06fdca1244bc96cfcd0e5be1bdfcd56c4eb"},
+    {file = "asgi_correlation_id-3.2.2.tar.gz", hash = "sha256:62db23c909a802ce6ec0ac7ceb5f24d03d5358b761b2026c8de5fcbd5424afbd"},
 ]
 
 [package.dependencies]
 starlette = ">=0.18"
+
+[package.extras]
+celery = ["celery"]
 
 [[package]]
 name = "attrs"
@@ -1635,4 +1638,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<3.12"
-content-hash = "0b22882c65fc2e3345c38b132fc13f3de52f8c96bf31da4458c882298f144d99"
+content-hash = "6ad362b830a3651b128520c565e10899a23c3acba1d59b2c6d016f93a1a39761"
