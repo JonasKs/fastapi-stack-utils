@@ -1,3 +1,4 @@
+import os
 import subprocess
 from subprocess import CalledProcessError
 
@@ -22,16 +23,29 @@ def load_docker_env() -> None:
         .removesuffix('-build')
     )
 
+    vault_address = os.environ.get('VAULT_ADDR', 'https://vault.intility.com')
+
     try:
-        subprocess.run(['vault', 'token', 'lookup'], check=True, stdout=subprocess.PIPE).stdout.decode('utf-8')
+        subprocess.run(
+            ['vault', 'token', 'lookup', f'-address={vault_address}'], check=True, stdout=subprocess.PIPE
+        ).stdout.decode('utf-8')
     except CalledProcessError:
         subprocess.run(
-            ['vault', 'login', '-method=oidc', '-path=aa'], check=True, stdout=subprocess.PIPE
+            ['vault', 'login', f'-address={vault_address}', '-method=oidc', '-path=aa'],
+            check=True,
+            stdout=subprocess.PIPE,
         ).stdout.decode('utf-8')
 
     secrets = (
         subprocess.run(
-            ['vault', 'read', '-field=data', '-format=yaml', f'kv-nsa/data/{project_name}/dev/'],
+            [
+                'vault',
+                'read',
+                f'-address={vault_address}',
+                '-field=data',
+                '-format=yaml',
+                f'kv-nsa/data/{project_name}/dev/',
+            ],
             check=True,
             stdout=subprocess.PIPE,
         )
