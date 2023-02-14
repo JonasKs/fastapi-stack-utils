@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "fastapi-stack-utils"
-version = "0.8.5"  # remember to change in fastapi_stack_utils/__init__.py too
+version = "0.8.6"  # remember to change in fastapi_stack_utils/__init__.py too
 description = "Utils to extend the FastAPI with logging and exception handlers"
 authors = ["Jonas Krüger Svensson <jonas-ks@hotmail.com>"]
 license = "MIT"
@@ -8,8 +8,7 @@ license = "MIT"
 [tool.poetry.dependencies]
 python = ">=3.10,<3.12"
 asgi-correlation-id = "3.2.2"
-fastapi = "0.91.0"
-gunicorn = "20.1.0"
+fastapi = "0.92.0"
 pydantic-vault = "0.7.2"
 python-json-logger = "2.0.5"
 pytz = "2022.7.1"
