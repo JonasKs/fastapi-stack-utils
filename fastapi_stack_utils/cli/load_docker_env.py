@@ -24,6 +24,7 @@ def load_docker_env() -> None:
     )
 
     vault_address = os.environ.get('VAULT_ADDR', 'https://vault.intility.com')
+    vault_env = os.environ.get('ENVIRONMENT', 'dev')
 
     try:
         subprocess.run(
@@ -44,7 +45,7 @@ def load_docker_env() -> None:
                 f'-address={vault_address}',
                 '-field=data',
                 '-format=yaml',
-                f'kv-nsa/data/{project_name}/dev/',
+                f'kv-nsa/data/{project_name}/{vault_env}/',
             ],
             check=True,
             stdout=subprocess.PIPE,
